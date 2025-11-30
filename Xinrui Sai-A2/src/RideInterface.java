@@ -4,10 +4,12 @@ public interface RideInterface {
     void removeVisitorFromQueue();
     void printQueue();
 
-    // 后续方法占位（Part4/5）
+    // Part4A历史方法
     void addVisitorToHistory(Visitor visitor);
     boolean checkVisitorFromHistory(Visitor visitor);
     int numberOfVisitors();
     void printRideHistory();
+
+    // Part5骑行周期方法
     void runOneCycle();
 }
