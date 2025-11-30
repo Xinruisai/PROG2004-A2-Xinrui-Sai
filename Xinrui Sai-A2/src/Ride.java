@@ -2,25 +2,36 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Iterator;
 
-// 关键：加implements RideInterface，实现接口
 public class Ride implements RideInterface {
-    // 原有属性
+    // 基础属性
     private String rideName;
     private Employee operator;
-    // 新增：Part3队列、Part4历史（提前初始化，避免空指针）
+    // Part3队列属性
     private Queue<Visitor> waitingQueue = new LinkedList<>();
+    // 后续属性占位
     private LinkedList<Visitor> rideHistory = new LinkedList<>();
+    private int maxRider;
+    private int numOfCycles = 0;
 
-    // 原有构造器不变
+    // 构造器
     public Ride() {}
     public Ride(String rideName, Employee operator) {
         this.rideName = rideName;
         this.operator = operator;
     }
+    public Ride(String rideName, Employee operator, int maxRider) {
+        this.rideName = rideName;
+        this.operator = operator;
+        this.maxRider = maxRider;
+    }
 
-    // 实现接口的8个方法（先写基础逻辑，能跑就行）
+    // ========== Part3 队列核心方法（完整实现） ==========
     @Override
     public void addVisitorToQueue(Visitor visitor) {
+        if (visitor == null) {
+            System.out.println("❌ 游客信息不能为空！");
+            return;
+        }
         waitingQueue.offer(visitor);
         System.out.println("✅ 游客" + visitor.getName() + "已加入" + rideName + "队列");
     }
@@ -48,53 +59,22 @@ public class Ride implements RideInterface {
         }
     }
 
+    // 后续方法空实现（保证接口不报错）
     @Override
-    public void addVisitorToHistory(Visitor visitor) {
-        rideHistory.add(visitor);
-        System.out.println("✅ 游客" + visitor.getName() + "已加入" + rideName + "历史");
-    }
-
+    public void addVisitorToHistory(Visitor visitor) {}
     @Override
-    public boolean checkVisitorFromHistory(Visitor visitor) {
-        // 按门票号判断（唯一标识）
-        boolean exists = rideHistory.stream().anyMatch(v -> v.getTicketId().equals(visitor.getTicketId()));
-        System.out.println("🔍 游客" + visitor.getName() + "是否在历史：" + exists);
-        return exists;
-    }
-
+    public boolean checkVisitorFromHistory(Visitor visitor) { return false; }
     @Override
-    public int numberOfVisitors() {
-        int count = rideHistory.size();
-        System.out.println("📊 " + rideName + "历史游客数：" + count);
-        return count;
-    }
-
+    public int numberOfVisitors() { return 0; }
     @Override
-    public void printRideHistory() {
-        System.out.println("\n📜 " + rideName + "骑行历史（共" + rideHistory.size() + "人）：");
-        if (rideHistory.isEmpty()) {
-            System.out.println("历史为空");
-            return;
-        }
-        Iterator<Visitor> it = rideHistory.iterator();
-        int i = 1;
-        while (it.hasNext()) {
-            System.out.println(i++ + ". " + it.next());
-        }
-    }
-
+    public void printRideHistory() {}
     @Override
-    public void runOneCycle() {
-        // 暂时留空，后续补
-        System.out.println("⚠️  待实现runOneCycle方法");
-    }
+    public void runOneCycle() {}
 
-    // 原有Getter和Setter不变（新增队列和历史的Getter，可选）
-    public Queue<Visitor> getWaitingQueue() {
-        return waitingQueue;
-    }
-
-    public LinkedList<Visitor> getRideHistory() {
-        return rideHistory;
-    }
+    // Getter和Setter
+    public String getRideName() { return rideName; }
+    public void setRideName(String rideName) { this.rideName = rideName; }
+    public Employee getOperator() { return operator; }
+    public void setOperator(Employee operator) { this.operator = operator; }
+    public Queue<Visitor> getWaitingQueue() { return waitingQueue; }
 }
