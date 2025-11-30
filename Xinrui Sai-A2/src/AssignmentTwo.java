@@ -2,7 +2,7 @@ public class AssignmentTwo {
     // ========== 完整main方法（直接运行，无需修改） ==========
     public static void main(String[] args) {
         AssignmentTwo test = new AssignmentTwo();
-        test.partFive(); // 直接调用Part5测试方法
+        test.partSix(); // 直接调用Part6 CSV导出测试方法
     }
 
     // Part3 队列测试（保留）
@@ -56,33 +56,38 @@ public class AssignmentTwo {
         thunder.printRideHistory();
     }
 
-    // ========== Part5 骑行周期测试（完整实现） ==========
+    // Part5 骑行周期测试（保留）
     public void partFive() {
         System.out.println("=== Part5 骑行周期测试（Xinrui Sai） ===");
-        // 1. 创建操作员
         Employee op = new Employee("张三", 30, "440101199501011234", "EMP001", "过山车操作员");
-        // 2. 创建过山车（单次最大2人）
         Ride roller = new Ride("过山车", op, 2);
-        // 3. 添加6个游客到队列
         roller.addVisitorToQueue(new Visitor("游客1", 20, "T001", "2025-12-01"));
         roller.addVisitorToQueue(new Visitor("游客2", 21, "T002", "2025-12-01"));
         roller.addVisitorToQueue(new Visitor("游客3", 22, "T003", "2025-12-01"));
         roller.addVisitorToQueue(new Visitor("游客4", 23, "T004", "2025-12-01"));
         roller.addVisitorToQueue(new Visitor("游客5", 24, "T005", "2025-12-01"));
         roller.addVisitorToQueue(new Visitor("游客6", 25, "T006", "2025-12-01"));
-        // 4. 打印初始队列
         System.out.println("🔸 初始队列：");
         roller.printQueue();
-        // 5. 运行1次周期
         roller.runOneCycle();
-        // 6. 打印运行后队列和历史
         System.out.println("\n🔸 运行后队列：");
         roller.printQueue();
         System.out.println("🔸 运行后历史：");
         roller.printRideHistory();
     }
 
+    // ========== Part6 CSV导出测试（完整实现） ==========
+    public void partSix() {
+        System.out.println("=== Part6 CSV导出测试（Xinrui Sai） ===");
+        // 创建骑行项目并添加测试数据
+        Ride roller = new Ride("过山车", null, 2);
+        roller.addVisitorToHistory(new Visitor("游客1", 20, "T001", "2025-12-01"));
+        roller.addVisitorToHistory(new Visitor("游客2", 21, "T002", "2025-12-01"));
+        roller.addVisitorToHistory(new Visitor("游客3", 22, "T003", "2025-12-01"));
+        // 执行CSV导出
+        roller.exportRideHistory();
+    }
+
     // 后续方法占位
-    public void partSix() {}
     public void partSeven() {}
 }

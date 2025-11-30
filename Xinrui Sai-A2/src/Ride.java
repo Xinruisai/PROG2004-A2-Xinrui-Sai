@@ -2,20 +2,18 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Collections;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Ride implements RideInterface {
-    // 基础属性
     private String rideName;
     private Employee operator;
-    // Part3队列属性
     private Queue<Visitor> waitingQueue = new LinkedList<>();
-    // Part4A历史属性
     private LinkedList<Visitor> rideHistory = new LinkedList<>();
-    // Part5核心属性：单次最大人数、运行周期数
     private int maxRider;
     private int numOfCycles = 0;
 
-    // 构造器
     public Ride() {}
     public Ride(String rideName, Employee operator) {
         this.rideName = rideName;
@@ -27,7 +25,7 @@ public class Ride implements RideInterface {
         this.maxRider = maxRider;
     }
 
-    // ========== Part3 队列方法 ==========
+    // Part3 队列方法
     @Override
     public void addVisitorToQueue(Visitor visitor) {
         if (visitor == null) {
@@ -61,7 +59,7 @@ public class Ride implements RideInterface {
         }
     }
 
-    // ========== Part4A 历史方法 ==========
+    // Part4A 历史方法
     @Override
     public void addVisitorToHistory(Visitor visitor) {
         if (visitor == null) {
@@ -104,7 +102,7 @@ public class Ride implements RideInterface {
         }
     }
 
-    // ========== Part4B 排序方法 ==========
+    // Part4B 排序方法
     public void sortRideHistory() {
         if (rideHistory.isEmpty()) {
             System.out.println("❌ " + rideName + "历史记录为空，无需排序");
@@ -114,24 +112,20 @@ public class Ride implements RideInterface {
         System.out.println("✅ " + rideName + "历史已按【年龄升序+票号升序】排序完成");
     }
 
-    // ========== Part5 骑行周期核心方法（完整实现） ==========
+    // Part5 骑行周期方法
     @Override
     public void runOneCycle() {
         System.out.println("\n=== " + rideName + " 运行单次骑行周期（Xinrui Sai） ===");
-        // 1. 检查是否有操作员
         if (this.operator == null) {
             System.out.println("❌ 错误：无操作员，无法运行骑行！");
             return;
         }
-        // 2. 检查队列是否为空
         if (waitingQueue.isEmpty()) {
             System.out.println("❌ 错误：等待队列为空，无法运行骑行！");
             return;
         }
-        // 3. 计算本次可搭载人数（不超过maxRider）
         int takeNum = Math.min(maxRider, waitingQueue.size());
         System.out.println("✅ 本次可搭载游客数：" + takeNum + "人（单次最大：" + maxRider + "人）");
-        // 4. 从队列转移到历史
         for (int i = 0; i < takeNum; i++) {
             Visitor v = waitingQueue.poll();
             if (v != null) {
@@ -139,12 +133,37 @@ public class Ride implements RideInterface {
                 System.out.println("→ 游客" + v.getName() + "已完成骑行，加入历史记录");
             }
         }
-        // 5. 更新周期计数
         numOfCycles++;
         System.out.println("✅ " + rideName + "已运行" + numOfCycles + "次周期，剩余队列游客数：" + waitingQueue.size());
     }
 
-    // Getter和Setter（完整）
+    // Part6 CSV导出方法（核心：路径改为C:\Users\33123\Desktop）
+    public void exportRideHistory() {
+        // 已适配你的实际路径：C:\Users\33123\Desktop
+        String filePath = "C:\\Users\\33123\\Desktop\\ride_history.csv";
+        System.out.println("\n=== 导出" + rideName + "历史到CSV（Xinrui Sai） ===");
+
+        if (rideHistory.isEmpty()) {
+            System.out.println("❌ 历史记录为空，无需导出");
+            return;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            bw.write("name,age,ticketId,visitDate");
+            bw.newLine();
+            for (Visitor v : rideHistory) {
+                String line = v.getName() + "," + v.getAge() + "," + v.getTicketId() + "," + v.getVisitDate();
+                bw.write(line);
+                bw.newLine();
+            }
+            System.out.println("✅ 成功导出到：" + filePath);
+            System.out.println("✅ 可在桌面找到 ride_history.csv 文件");
+        } catch (IOException e) {
+            System.out.println("❌ 导出失败：" + e.getMessage());
+        }
+    }
+
+    // Getter和Setter
     public String getRideName() { return rideName; }
     public void setRideName(String rideName) { this.rideName = rideName; }
     public Employee getOperator() { return operator; }
