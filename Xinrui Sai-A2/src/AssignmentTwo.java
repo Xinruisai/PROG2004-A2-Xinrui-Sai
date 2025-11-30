@@ -1,12 +1,11 @@
 public class AssignmentTwo {
-    // 程序入口
+    // 程序入口（直接运行Part4B，无需修改）
     public static void main(String[] args) {
         AssignmentTwo test = new AssignmentTwo();
-        // test.partThree(); // 注释Part3，运行Part4A
-        test.partFourA();
+        test.partFourB();
     }
 
-    // Part3 队列测试（保留）
+    // Part3 队列测试（保留，无需修改）
     public void partThree() {
         System.out.println("=== Part3 队列功能测试（Xinrui Sai） ===");
         Employee operator = new Employee("张三", 30, "440101199501011234", "EMP001", "骑行操作员");
@@ -26,30 +25,43 @@ public class AssignmentTwo {
         rollerCoaster.printQueue();
     }
 
-    // ========== Part4A 历史测试（新增完整方法） ==========
+    // Part4A 历史测试（保留，无需修改）
     public void partFourA() {
         System.out.println("=== Part4A 历史功能测试（Xinrui Sai） ===");
-        // 创建骑行项目
         Ride thunder = new Ride("雷霆战车", null);
-        // 创建测试游客
         Visitor v1 = new Visitor("马九", 24, "T006", "2025-12-01");
         Visitor v2 = new Visitor("胡十", 32, "T007", "2025-12-01");
         Visitor v3 = new Visitor("吴十一", 28, "T008", "2025-12-01");
-        // 1. 添加游客到历史
         thunder.addVisitorToHistory(v1);
         thunder.addVisitorToHistory(v2);
         thunder.addVisitorToHistory(v3);
-        // 2. 检查某游客是否在历史
         thunder.checkVisitorFromHistory(v1);
         thunder.checkVisitorFromHistory(new Visitor("不存在", 20, "T999", "2025-12-01"));
-        // 3. 统计历史游客数
         thunder.numberOfVisitors();
-        // 4. 打印历史
         thunder.printRideHistory();
     }
 
-    // 后续方法占位
-    public void partFourB() {}
+    // ========== Part4B 排序测试（完整实现，无需添加） ==========
+    public void partFourB() {
+        System.out.println("=== Part4B 排序功能测试（Xinrui Sai） ===");
+        Ride thunder = new Ride("雷霆战车", null);
+        // 添加乱序测试游客
+        thunder.addVisitorToHistory(new Visitor("A", 28, "T010", "2025-12-01"));
+        thunder.addVisitorToHistory(new Visitor("B", 22, "T009", "2025-12-01"));
+        thunder.addVisitorToHistory(new Visitor("C", 25, "T008", "2025-12-01"));
+        thunder.addVisitorToHistory(new Visitor("D", 22, "T007", "2025-12-01"));
+
+        // 排序前打印
+        System.out.println("🔸 排序前：");
+        thunder.printRideHistory();
+        // 执行排序
+        thunder.sortRideHistory();
+        // 排序后打印
+        System.out.println("🔸 排序后：");
+        thunder.printRideHistory();
+    }
+
+    // 后续方法占位（无需修改）
     public void partFive() {}
     public void partSix() {}
     public void partSeven() {}

@@ -1,6 +1,7 @@
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Collections;
 
 public class Ride implements RideInterface {
     // 基础属性
@@ -26,7 +27,7 @@ public class Ride implements RideInterface {
         this.maxRider = maxRider;
     }
 
-    // ========== Part3 队列方法（保留） ==========
+    // ========== Part3 队列方法 ==========
     @Override
     public void addVisitorToQueue(Visitor visitor) {
         if (visitor == null) {
@@ -60,7 +61,7 @@ public class Ride implements RideInterface {
         }
     }
 
-    // ========== Part4A 历史核心方法（新增完整实现） ==========
+    // ========== Part4A 历史方法 ==========
     @Override
     public void addVisitorToHistory(Visitor visitor) {
         if (visitor == null) {
@@ -77,7 +78,6 @@ public class Ride implements RideInterface {
             System.out.println("❌ 游客信息不能为空！");
             return false;
         }
-        // 按门票号唯一判断
         boolean exists = rideHistory.stream().anyMatch(v -> v.getTicketId().equals(visitor.getTicketId()));
         System.out.println("🔍 游客" + visitor.getName() + "（票号：" + visitor.getTicketId() + "）是否在历史：" + exists);
         return exists;
@@ -104,11 +104,21 @@ public class Ride implements RideInterface {
         }
     }
 
+    // ========== Part4B 排序方法（完整实现，无需添加） ==========
+    public void sortRideHistory() {
+        if (rideHistory.isEmpty()) {
+            System.out.println("❌ " + rideName + "历史记录为空，无需排序");
+            return;
+        }
+        Collections.sort(rideHistory, new VisitorComparator());
+        System.out.println("✅ " + rideName + "历史已按【年龄升序+票号升序】排序完成");
+    }
+
     // Part5方法空实现（占位）
     @Override
     public void runOneCycle() {}
 
-    // Getter和Setter
+    // Getter和Setter（完整）
     public String getRideName() { return rideName; }
     public void setRideName(String rideName) { this.rideName = rideName; }
     public Employee getOperator() { return operator; }
