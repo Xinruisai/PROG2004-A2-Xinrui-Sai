@@ -1,8 +1,12 @@
+/**
+ * GenAI Declaration (Xinrui Sai)
+ * I, Xinrui Sai, acknowledge that I have not knowingly used GenAI to complete this PROG2004 A2 assessment.
+ */
 public class AssignmentTwo {
-    // ========== 完整main方法（直接运行，无需修改） ==========
+    // ========== 完整main方法（直接运行，调用Part7导入） ==========
     public static void main(String[] args) {
         AssignmentTwo test = new AssignmentTwo();
-        test.partSix(); // 直接调用Part6 CSV导出测试方法
+        test.partSeven(); // 运行CSV导入测试
     }
 
     // Part3 队列测试（保留）
@@ -76,18 +80,33 @@ public class AssignmentTwo {
         roller.printRideHistory();
     }
 
-    // ========== Part6 CSV导出测试（完整实现） ==========
+    // Part6 CSV导出测试（保留）
     public void partSix() {
         System.out.println("=== Part6 CSV导出测试（Xinrui Sai） ===");
-        // 创建骑行项目并添加测试数据
         Ride roller = new Ride("过山车", null, 2);
         roller.addVisitorToHistory(new Visitor("游客1", 20, "T001", "2025-12-01"));
         roller.addVisitorToHistory(new Visitor("游客2", 21, "T002", "2025-12-01"));
         roller.addVisitorToHistory(new Visitor("游客3", 22, "T003", "2025-12-01"));
-        // 执行CSV导出
         roller.exportRideHistory();
     }
 
-    // 后续方法占位
-    public void partSeven() {}
+    // ========== Part7 CSV导入测试（完整实现） ==========
+    public void partSeven() {
+        System.out.println("=== Part7 CSV导入测试（Xinrui Sai） ===");
+        // 1. 先导出一份测试数据（确保桌面有CSV文件）
+        Ride roller = new Ride("过山车", null, 2);
+        roller.addVisitorToHistory(new Visitor("游客1", 20, "T001", "2025-12-01"));
+        roller.addVisitorToHistory(new Visitor("游客2", 21, "T002", "2025-12-01"));
+        roller.addVisitorToHistory(new Visitor("游客3", 22, "T003", "2025-12-01"));
+        roller.exportRideHistory();
+
+        // 2. 清空历史后导入CSV文件
+        roller.importRideHistory();
+
+        // 3. 验证导入结果
+        System.out.println("\n🔸 导入后历史记录：");
+        roller.printRideHistory();
+        System.out.println("🔸 导入后游客总数：");
+        roller.numberOfVisitors();
+    }
 }

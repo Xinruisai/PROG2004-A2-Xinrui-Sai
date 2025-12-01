@@ -1,3 +1,18 @@
+/**
+ * PROG2004 A2 Video Script (Xinrui Sai)
+ * 1. 面向对象设计（ULO2）：
+ *    - Person作为抽象类，Employee/Visitor继承复用核心属性（姓名、年龄）；
+ *    - Ride实现RideInterface接口，强制实现队列、历史、骑行周期等所有业务方法，保证接口一致性。
+ * 2. 高级集合（ULO3）：
+ *    - 等待队列使用Queue（LinkedList）实现FIFO特性，符合排队逻辑；
+ *    - 历史记录使用LinkedList，结合VisitorComparator实现按年龄升序+票号升序排序。
+ * 3. IO操作（ULO4）：
+ *    - 实现CSV导出/导入功能，路径适配Windows系统（C:\Users\33123\Desktop），处理IO异常和数据格式错误；
+ *    - 导出时自动生成表头，导入时跳过表头，保证数据完整性。
+ * 4. 核心业务逻辑：
+ *    - runOneCycle方法实现队列转历史，限制单次搭载人数，统计运行周期数；
+ *    - 导入前清空历史，避免数据重复，提升数据准确性。
+ */
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -5,6 +20,8 @@ import java.util.Collections;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Ride implements RideInterface {
     private String rideName;
@@ -25,7 +42,7 @@ public class Ride implements RideInterface {
         this.maxRider = maxRider;
     }
 
-    // Part3 队列方法
+    // ========== Part3 队列方法 ==========
     @Override
     public void addVisitorToQueue(Visitor visitor) {
         if (visitor == null) {
@@ -59,7 +76,7 @@ public class Ride implements RideInterface {
         }
     }
 
-    // Part4A 历史方法
+    // ========== Part4A 历史方法 ==========
     @Override
     public void addVisitorToHistory(Visitor visitor) {
         if (visitor == null) {
@@ -102,7 +119,7 @@ public class Ride implements RideInterface {
         }
     }
 
-    // Part4B 排序方法
+    // ========== Part4B 排序方法 ==========
     public void sortRideHistory() {
         if (rideHistory.isEmpty()) {
             System.out.println("❌ " + rideName + "历史记录为空，无需排序");
@@ -112,7 +129,7 @@ public class Ride implements RideInterface {
         System.out.println("✅ " + rideName + "历史已按【年龄升序+票号升序】排序完成");
     }
 
-    // Part5 骑行周期方法
+    // ========== Part5 骑行周期方法 ==========
     @Override
     public void runOneCycle() {
         System.out.println("\n=== " + rideName + " 运行单次骑行周期（Xinrui Sai） ===");
@@ -137,9 +154,8 @@ public class Ride implements RideInterface {
         System.out.println("✅ " + rideName + "已运行" + numOfCycles + "次周期，剩余队列游客数：" + waitingQueue.size());
     }
 
-    // Part6 CSV导出方法（核心：路径改为C:\Users\33123\Desktop）
+    // ========== Part6 CSV导出方法（路径适配33123） ==========
     public void exportRideHistory() {
-        // 已适配你的实际路径：C:\Users\33123\Desktop
         String filePath = "C:\\Users\\33123\\Desktop\\ride_history.csv";
         System.out.println("\n=== 导出" + rideName + "历史到CSV（Xinrui Sai） ===");
 
@@ -163,7 +179,45 @@ public class Ride implements RideInterface {
         }
     }
 
-    // Getter和Setter
+    // ========== Part7 CSV导入方法（核心新增，路径适配33123） ==========
+    public void importRideHistory() {
+        String filePath = "C:\\Users\\33123\\Desktop\\ride_history.csv";
+        System.out.println("\n=== 从CSV导入" + rideName + "历史（Xinrui Sai） ===");
+
+        // 清空原有历史（避免重复导入）
+        rideHistory.clear();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            boolean isFirstLine = true; // 跳过CSV表头
+            int importCount = 0;
+
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+                // 拆分CSV字段（按逗号分隔）
+                String[] parts = line.split(",");
+                if (parts.length != 4) {
+                    System.out.println("⚠️  跳过无效行：" + line);
+                    continue;
+                }
+                // 创建游客对象并添加到历史
+                Visitor v = new Visitor(parts[0], Integer.parseInt(parts[1]), parts[2], parts[3]);
+                rideHistory.add(v);
+                importCount++;
+                System.out.println("→ 导入成功：" + v);
+            }
+            System.out.println("✅ 导入完成！共导入" + importCount + "名游客");
+        } catch (IOException e) {
+            System.out.println("❌ 导入失败（文件不存在/路径错误）：" + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("❌ 导入失败（年龄格式错误）：" + e.getMessage());
+        }
+    }
+
+    // Getter和Setter（完整）
     public String getRideName() { return rideName; }
     public void setRideName(String rideName) { this.rideName = rideName; }
     public Employee getOperator() { return operator; }
